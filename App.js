@@ -13,49 +13,70 @@ import {
   Image, 
   Animated,
   Dimensions, 
-  TouchableWithoutFeedback
+  Button, 
+  TouchableWithoutFeedback, 
+  Art
 } from 'react-native';
+import Sound from 'react-native-sound';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
+
+const sound = new Sound('AudioTest.mp3', 
+  null, 
+  (error) => {
+    if (error) {
+        console.log("error");
+        return;   
+    }
 });
+
 
 type Props = {};
 
 
 
-class Photo extends Component {
 
+class Photo extends Component {
 
   state = {
     fadeAnima: new Animated.Value(1),
-    }
-
+    color: "brown"
+  }
 
   fade = () => {
-    Animated.timing(this.state.fadeAnima, {toValue: 0, duration: 1000}).start();
+    Animated.timing(this.state.fadeAnima, {toValue: 0, duration: 10000}).start();
+    sound.play(); 
   }
 
-  stopFade = () => {
-    Animated.timing(this.state.fadeAnima, {toValue: 0, duration: 1000}).stop(
-      this.setState(() => {opacityTracker: this.state.fadeAnima})
-      ); 
+  componentDidMount = () => {
+    console.log("it mounted"); 
   }
+  stopFade = () => {
+
+    Animated.timing(this.state.fadeAnima, {toValue: 0, duration: 10000}).stop(
+     // this.setState(() => {opacityTracker: this.state.fadeAnima}
+        //)
+      ); 
+    sound.pause()
+  }
+
+  stopSound = () => {
+    sound.stop(); 
+  }
+
+
 
   render(){
-    let { fadeAnima } = this.state;
+    let { fadeAnima, color } = this.state;
 
    return (
-      <View style={styles.container}>
-         
+      <View style={[styles.container, {backgroundColor: "green"}]}>
+      
           <TouchableWithoutFeedback 
             style={{width: 300, height: 300}} 
             onPressIn={this.fade} 
-            onPressOut={this.stopFade}>
-               <Animated.Image 
+            onPressOut={this.stopFade}
+           >
+              <Animated.Image 
                 source={require('./assets/chaitrayfixed.jpg')} 
                 resizeMode="cover"
                 style={{ 
@@ -64,9 +85,12 @@ class Photo extends Component {
                   opacity: fadeAnima,
                   justifyContent: 'center', 
                   alignItems: 'center'}}>
-                </Animated.Image>
+              </Animated.Image>
            </TouchableWithoutFeedback>
-              
+       <Button 
+         title="Sound Stop" 
+         color={color} 
+         onPress={this.stopSound} />
       </View>
     );
   }
@@ -85,7 +109,6 @@ export default class App extends Component<Props> {
     );
   }
 }
-
 
 
 
