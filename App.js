@@ -32,8 +32,6 @@ class Photo extends Component {
 
   state = {
     fadeAnima: new Animated.Value(1),
-    opacityTracker: 1, 
-    accumulatedRound: 0
     }
 
 
@@ -52,21 +50,23 @@ class Photo extends Component {
 
    return (
       <View style={styles.container}>
+         
           <TouchableWithoutFeedback 
             style={{width: 300, height: 300}} 
             onPressIn={this.fade} 
             onPressOut={this.stopFade}>
-               <Animated.View style={{ 
+               <Animated.Image 
+                source={require('./assets/chaitrayfixed.jpg')} 
+                resizeMode="cover"
+                style={{ 
                   flex: 1, 
-                  height: 300,
-                  width: 300, 
-                  opacity: fadeAnima, 
-                  backgroundColor: 'purple',
+                  width: '100%', 
+                  opacity: fadeAnima,
                   justifyContent: 'center', 
                   alignItems: 'center'}}>
-                   <Animated.Text>{fadeAnima}</Animated.Text>
-               </Animated.View>
+                </Animated.Image>
            </TouchableWithoutFeedback>
+              
       </View>
     );
   }
